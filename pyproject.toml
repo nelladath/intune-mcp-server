@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "intune-mcp-server"
+version = "1.0.0"
+description = "MCP Server for Microsoft Intune management via Microsoft Graph API"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Sujin Nelladath"}
+]
+keywords = ["mcp", "intune", "microsoft-graph", "device-management", "ai", "claude", "cursor", "endpoint-manager"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Systems Administration",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "httpx>=0.27.0",
+    "msal>=1.28.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/nelladath/intune-mcp-server"
+Repository = "https://github.com/nelladath/intune-mcp-server"
+Issues = "https://github.com/nelladath/intune-mcp-server/issues"
+
+[project.scripts]
+intune-mcp-server = "intune_mcp_server.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["intune_mcp_server"]
+

@@ -1,0 +1,9 @@
+# Microsoft Graph MCP Server for Intune
+# Dependencies
+
+mcp>=1.0.0
+httpx>=0.27.0
+msal>=1.28.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
