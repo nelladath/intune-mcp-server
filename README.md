@@ -66,7 +66,9 @@ CLIENT_ID=your-client-id
 CLIENT_SECRET=your-client-secret
 ```
 
-## 🔧 Cursor IDE Setup
+## 🔧 IDE Setup
+
+### Cursor IDE
 
 Add to your Cursor MCP settings (`%APPDATA%\Cursor\User\globalStorage\cursor.mcp\mcp.json`):
 
@@ -88,6 +90,98 @@ Add to your Cursor MCP settings (`%APPDATA%\Cursor\User\globalStorage\cursor.mcp
 ```
 
 **Restart Cursor** after adding the configuration.
+
+### Visual Studio Code
+
+VS Code supports MCP servers through the **GitHub Copilot** extension with MCP support.
+
+#### Option 1: User Settings (Global)
+
+Add to your VS Code settings file (`%APPDATA%\Code\User\settings.json`):
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "intune": {
+        "command": "python",
+        "args": ["-m", "intune_mcp_server.server"],
+        "cwd": "C:\\path\\to\\intune-mcp-server",
+        "env": {
+          "TENANT_ID": "your-tenant-id",
+          "CLIENT_ID": "your-client-id",
+          "CLIENT_SECRET": "your-client-secret"
+        }
+      }
+    }
+  }
+}
+```
+
+#### Option 2: Workspace Settings (Project-specific)
+
+Create `.vscode/mcp.json` in your workspace:
+
+```json
+{
+  "servers": {
+    "intune": {
+      "command": "python",
+      "args": ["-m", "intune_mcp_server.server"],
+      "cwd": "C:\\path\\to\\intune-mcp-server",
+      "env": {
+        "TENANT_ID": "your-tenant-id",
+        "CLIENT_ID": "your-client-id",
+        "CLIENT_SECRET": "your-client-secret"
+      }
+    }
+  }
+}
+```
+
+#### Option 3: Using mcp.json file
+
+Create `mcp.json` in your user home directory (`%USERPROFILE%\.mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "intune": {
+      "command": "python",
+      "args": ["-m", "intune_mcp_server.server"],
+      "cwd": "C:\\path\\to\\intune-mcp-server",
+      "env": {
+        "TENANT_ID": "your-tenant-id",
+        "CLIENT_ID": "your-client-id",
+        "CLIENT_SECRET": "your-client-secret"
+      }
+    }
+  }
+}
+```
+
+#### macOS/Linux Paths
+
+For macOS/Linux users, use these paths:
+
+```json
+{
+  "mcpServers": {
+    "intune": {
+      "command": "python3",
+      "args": ["-m", "intune_mcp_server.server"],
+      "cwd": "/path/to/intune-mcp-server",
+      "env": {
+        "TENANT_ID": "your-tenant-id",
+        "CLIENT_ID": "your-client-id",
+        "CLIENT_SECRET": "your-client-secret"
+      }
+    }
+  }
+}
+```
+
+**Restart VS Code** after adding the configuration.
 
 ## 📚 Available Tools
 
