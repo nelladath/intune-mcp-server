@@ -34,6 +34,7 @@ from intune_mcp_server.tools import cloud_pc
 from intune_mcp_server.tools import tenant_admin
 from intune_mcp_server.tools import scripts
 from intune_mcp_server.tools import security
+from intune_mcp_server.tools import entra_devices
 
 # Create the MCP server instance using FastMCP
 mcp = FastMCP("intune-entra-mcp-server")
@@ -804,6 +805,49 @@ async def list_device_categories() -> dict[str, Any]:
 async def create_device_category(display_name: str, description: str = "") -> dict[str, Any]:
     """Create a new device category."""
     return await security.create_device_category(display_name, description)
+
+
+# ============== ENTRA ID DEVICE TOOLS ==============
+
+@mcp.tool()
+async def list_entra_devices(top: int = 50, filter_query: str = "") -> dict[str, Any]:
+    """List all devices registered in Entra ID (Azure AD)."""
+    return await entra_devices.list_entra_devices(top, filter_query)
+
+@mcp.tool()
+async def search_entra_devices(search_term: str) -> dict[str, Any]:
+    """Search for devices in Entra ID by display name."""
+    return await entra_devices.search_entra_devices(search_term)
+
+@mcp.tool()
+async def get_entra_device(device_id: str) -> dict[str, Any]:
+    """Get details of a specific Entra ID device."""
+    return await entra_devices.get_entra_device(device_id)
+
+@mcp.tool()
+async def delete_entra_device(device_name: str = None, device_id: str = None, confirm: bool = False) -> dict[str, Any]:
+    """Delete a device from Entra ID (Azure AD). Requires confirm=True."""
+    return await entra_devices.delete_entra_device(device_name, device_id, confirm)
+
+@mcp.tool()
+async def delete_intune_device(device_name: str = None, device_id: str = None, confirm: bool = False) -> dict[str, Any]:
+    """Delete a device from Intune (not just retire, but fully delete). Requires confirm=True."""
+    return await entra_devices.delete_intune_device(device_name, device_id, confirm)
+
+@mcp.tool()
+async def delete_device_from_all(device_name: str, confirm: bool = False) -> dict[str, Any]:
+    """Delete a device from both Intune AND Entra ID. Requires confirm=True."""
+    return await entra_devices.delete_device_from_all(device_name, confirm)
+
+@mcp.tool()
+async def disable_entra_device(device_id: str) -> dict[str, Any]:
+    """Disable a device in Entra ID."""
+    return await entra_devices.disable_entra_device(device_id)
+
+@mcp.tool()
+async def enable_entra_device(device_id: str) -> dict[str, Any]:
+    """Enable a device in Entra ID."""
+    return await entra_devices.enable_entra_device(device_id)
 
 
 # Entry point

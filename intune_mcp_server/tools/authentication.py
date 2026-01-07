@@ -549,15 +549,15 @@ async def get_directory_audit_logs(
                 "result": log.get("result"),
                 "resultReason": log.get("resultReason"),
                 "initiatedBy": {
-                    "user": log.get("initiatedBy", {}).get("user", {}).get("userPrincipalName"),
-                    "app": log.get("initiatedBy", {}).get("app", {}).get("displayName"),
+                    "user": (log.get("initiatedBy") or {}).get("user", {}).get("userPrincipalName") if (log.get("initiatedBy") or {}).get("user") else None,
+                    "app": (log.get("initiatedBy") or {}).get("app", {}).get("displayName") if (log.get("initiatedBy") or {}).get("app") else None,
                 },
                 "targetResources": [
                     {
                         "displayName": t.get("displayName"),
                         "type": t.get("type"),
                     }
-                    for t in log.get("targetResources", [])
+                    for t in (log.get("targetResources") or [])
                 ],
             }
             for log in logs
