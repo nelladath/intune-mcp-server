@@ -1,84 +1,167 @@
-# 🖥️ Intune MCP Server
+# Microsoft Intune & Entra ID MCP Server
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
-[![Microsoft Graph](https://img.shields.io/badge/Microsoft%20Graph-API-blue.svg)](https://docs.microsoft.com/graph/)
+A comprehensive Model Context Protocol (MCP) server for managing Microsoft Intune and Entra ID (Azure AD) through the Microsoft Graph API. This server enables AI assistants like Claude to perform device management, user administration, security configuration, and more.
 
-A **Model Context Protocol (MCP) server** that enables AI assistants (like Claude in Cursor) to manage Microsoft Intune through the Microsoft Graph API.
+## 🚀 Features
 
-> Created by [Sujin Nelladath](https://github.com/nelladath) - Microsoft Graph MVP
+### **Intune Device Management**
+- List, search, and manage devices
+- Compliance monitoring and reporting
+- Remote actions (sync, restart, lock, wipe, retire)
+- Autopilot device management
+- Device configuration profiles
+- Compliance policies
 
-## ✨ Features
+### **Entra ID (Azure AD) User Management**
+- Full user CRUD operations
+- Password management and reset
+- License assignment and management
+- User enable/disable
+- Session revocation
+- Sign-in activity tracking
+- Deleted user recovery
 
-| Category | Capabilities |
-|----------|-------------|
-| 🖥️ **Device Management** | List, search, sync, restart, lock, wipe, retire devices |
-| 📱 **App Management** | List apps, view assignments, search applications |
-| 📋 **Policy Management** | Compliance policies, configuration profiles |
-| 🚀 **Autopilot** | List devices, deployment profiles |
-| 👥 **Users & Groups** | Search users, list groups, view memberships |
+### **Group Management**
+- Security groups (static and dynamic)
+- Microsoft 365 groups
+- Member and owner management
+- Dynamic membership rules
+- Bulk member operations
 
-## 🚀 Quick Start
+### **Conditional Access**
+- Policy listing and management
+- Enable/disable policies
+- Named locations management
+- Policy coverage analysis
 
-### Prerequisites
+### **Authentication & Identity Protection**
+- MFA status monitoring
+- Authentication methods management
+- Sign-in logs
+- Risky user detection
+- Risk detections and alerts
+- Directory audit logs
 
-1. **Python 3.10+**
-2. **Azure AD App Registration** with Microsoft Graph permissions
+### **Windows 365 Cloud PC**
+- List and manage Cloud PCs
+- Provisioning policies
+- Restart, reprovision actions
+- Gallery and custom images
+- User settings management
 
-### Installation
+### **Tenant Administration**
+- Organization information
+- Domain management
+- Service health monitoring
+- Directory roles
+- License/subscription management
+- App registrations
 
-```bash
-# Clone the repository
-git clone https://github.com/nelladath/intune-mcp-server.git
-cd intune-mcp-server
+### **Scripts & Remediations**
+- PowerShell script management
+- Proactive remediations
+- Shell scripts (macOS/Linux)
+- Script deployment status
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\Activate.ps1
+### **Security & Compliance**
+- Security baselines
+- Endpoint security policies
+- App protection policies (MAM)
+- Enrollment restrictions
+- Device categories
+- BitLocker recovery keys
 
-# Install dependencies
-pip install -e .
+### **Reports**
+- Device compliance reports
+- Configuration profile status
+- App installation status
+- License usage reports
+- Hardware inventory
+
+## 📋 Prerequisites
+
+- Python 3.11+
+- Microsoft Entra ID (Azure AD) tenant
+- App registration with appropriate permissions
+
+## 🔐 Required API Permissions
+
+Add these permissions to your app registration in Azure Portal:
+
+### Intune
+```
+DeviceManagementManagedDevices.ReadWrite.All
+DeviceManagementConfiguration.ReadWrite.All
+DeviceManagementApps.ReadWrite.All
+DeviceManagementServiceConfig.ReadWrite.All
 ```
 
-### Azure AD Setup
+### Entra ID
+```
+User.ReadWrite.All
+Group.ReadWrite.All
+Directory.ReadWrite.All
+RoleManagement.ReadWrite.Directory
+Policy.ReadWrite.ConditionalAccess
+IdentityRiskyUser.ReadWrite.All
+IdentityRiskEvent.Read.All
+AuditLog.Read.All
+UserAuthenticationMethod.ReadWrite.All
+```
 
-1. Go to **Azure Portal** → **Azure Active Directory** → **App registrations**
-2. Click **New registration**
-3. Name: `Intune MCP Server`
-4. Add these **Application permissions** under Microsoft Graph:
-   - `DeviceManagementManagedDevices.ReadWrite.All`
-   - `DeviceManagementApps.ReadWrite.All`
-   - `DeviceManagementConfiguration.ReadWrite.All`
-   - `Directory.Read.All`
-   - `Group.ReadWrite.All`
-   - `User.Read.All`
-5. **Grant admin consent**
-6. Create a **Client Secret**
+### Windows 365
+```
+CloudPC.ReadWrite.All
+```
 
-### Configuration
+### Service Health & Reports
+```
+ServiceHealth.Read.All
+Reports.Read.All
+```
 
-Create a `.env` file:
+### Other
+```
+Organization.Read.All
+Domain.Read.All
+Application.Read.All
+```
 
+## 🛠️ Installation
+
+1. **Clone or download the repository**
+
+2. **Create a virtual environment**
+```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/macOS
+```
+
+3. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configure environment variables**
+
+Create a `.env` file or set environment variables:
 ```env
 TENANT_ID=your-tenant-id
 CLIENT_ID=your-client-id
 CLIENT_SECRET=your-client-secret
 ```
 
-## 🔧 IDE Setup
+## ⚙️ Configuration for Cursor
 
-### Cursor IDE
-
-Add to your Cursor MCP settings (`%APPDATA%\Cursor\User\globalStorage\cursor.mcp\mcp.json`):
+Add to your Cursor MCP configuration (`~/.cursor/mcp.json` on Windows: `%USERPROFILE%\.cursor\mcp.json`):
 
 ```json
 {
   "mcpServers": {
     "intune": {
-      "command": "python",
-      "args": ["-m", "intune_mcp_server.server"],
-      "cwd": "C:\\path\\to\\intune-mcp-server",
+      "command": "C:\\MCP\\venv\\Scripts\\python.exe",
+      "args": ["C:\\MCP\\intune_mcp_server\\server.py"],
       "env": {
         "TENANT_ID": "your-tenant-id",
         "CLIENT_ID": "your-client-id",
@@ -88,100 +171,6 @@ Add to your Cursor MCP settings (`%APPDATA%\Cursor\User\globalStorage\cursor.mcp
   }
 }
 ```
-
-**Restart Cursor** after adding the configuration.
-
-### Visual Studio Code
-
-VS Code supports MCP servers through the **GitHub Copilot** extension with MCP support.
-
-#### Option 1: User Settings (Global)
-
-Add to your VS Code settings file (`%APPDATA%\Code\User\settings.json`):
-
-```json
-{
-  "mcp": {
-    "servers": {
-      "intune": {
-        "command": "python",
-        "args": ["-m", "intune_mcp_server.server"],
-        "cwd": "C:\\path\\to\\intune-mcp-server",
-        "env": {
-          "TENANT_ID": "your-tenant-id",
-          "CLIENT_ID": "your-client-id",
-          "CLIENT_SECRET": "your-client-secret"
-        }
-      }
-    }
-  }
-}
-```
-
-#### Option 2: Workspace Settings (Project-specific)
-
-Create `.vscode/mcp.json` in your workspace:
-
-```json
-{
-  "servers": {
-    "intune": {
-      "command": "python",
-      "args": ["-m", "intune_mcp_server.server"],
-      "cwd": "C:\\path\\to\\intune-mcp-server",
-      "env": {
-        "TENANT_ID": "your-tenant-id",
-        "CLIENT_ID": "your-client-id",
-        "CLIENT_SECRET": "your-client-secret"
-      }
-    }
-  }
-}
-```
-
-#### Option 3: Using mcp.json file
-
-Create `mcp.json` in your user home directory (`%USERPROFILE%\.mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "intune": {
-      "command": "python",
-      "args": ["-m", "intune_mcp_server.server"],
-      "cwd": "C:\\path\\to\\intune-mcp-server",
-      "env": {
-        "TENANT_ID": "your-tenant-id",
-        "CLIENT_ID": "your-client-id",
-        "CLIENT_SECRET": "your-client-secret"
-      }
-    }
-  }
-}
-```
-
-#### macOS/Linux Paths
-
-For macOS/Linux users, use these paths:
-
-```json
-{
-  "mcpServers": {
-    "intune": {
-      "command": "python3",
-      "args": ["-m", "intune_mcp_server.server"],
-      "cwd": "/path/to/intune-mcp-server",
-      "env": {
-        "TENANT_ID": "your-tenant-id",
-        "CLIENT_ID": "your-client-id",
-        "CLIENT_SECRET": "your-client-secret"
-      }
-    }
-  }
-}
-```
-
-**Restart VS Code** after adding the configuration.
 
 ## 📚 Available Tools
 
@@ -190,82 +179,116 @@ For macOS/Linux users, use these paths:
 |------|-------------|
 | `list_managed_devices` | List all Intune managed devices |
 | `get_device_details` | Get comprehensive device information |
-| `search_devices` | Search by name, user, or serial number |
-| `sync_device` | Trigger device sync |
-| `restart_device` | Restart device remotely |
-| `remote_lock_device` | Lock device remotely |
-| `wipe_device` | Factory reset (requires confirmation) |
-| `retire_device` | Remove company data (requires confirmation) |
+| `search_devices` | Search devices by name, user, or serial |
 | `get_noncompliant_devices` | List non-compliant devices |
+| `sync_device` | Trigger device sync |
+| `restart_device` | Remotely restart device |
+| `remote_lock_device` | Remotely lock device |
+| `wipe_device` | Wipe device (destructive) |
+| `retire_device` | Retire device |
 
-### App Management
+### User Management
 | Tool | Description |
 |------|-------------|
-| `list_mobile_apps` | List all Intune apps |
-| `get_app_details` | Get app info and assignments |
-| `search_apps` | Search apps by name |
-
-### Policy Management
-| Tool | Description |
-|------|-------------|
-| `list_compliance_policies` | List compliance policies |
-| `list_configuration_profiles` | List configuration profiles |
-
-### Autopilot
-| Tool | Description |
-|------|-------------|
-| `list_autopilot_devices` | List Autopilot devices |
-| `list_autopilot_profiles` | List deployment profiles |
-
-### Users & Groups
-| Tool | Description |
-|------|-------------|
+| `list_users` | List all users |
 | `get_user` | Get user details |
-| `search_users` | Search for users |
-| `get_user_devices` | Get user's devices |
-| `list_groups` | List Azure AD groups |
-| `search_groups` | Search for groups |
+| `create_user` | Create new user |
+| `update_user` | Update user properties |
+| `delete_user` | Delete user |
+| `enable_user` / `disable_user` | Enable/disable account |
+| `reset_user_password` | Reset password |
+| `revoke_user_sessions` | Force re-authentication |
+| `get_user_licenses` | Get license assignments |
+| `assign_license` / `remove_license` | Manage licenses |
 
-## 💬 Example Usage
+### Group Management
+| Tool | Description |
+|------|-------------|
+| `list_groups` | List all groups |
+| `get_group` | Get group details |
+| `create_security_group` | Create security group |
+| `create_microsoft365_group` | Create M365 group |
+| `create_dynamic_security_group` | Create dynamic group |
+| `get_group_members` | List group members |
+| `add_group_member` / `remove_group_member` | Manage membership |
 
-Once configured, ask your AI assistant:
+### Conditional Access
+| Tool | Description |
+|------|-------------|
+| `list_conditional_access_policies` | List CA policies |
+| `get_conditional_access_policy` | Get policy details |
+| `enable_conditional_access_policy` | Enable policy |
+| `disable_conditional_access_policy` | Disable policy |
+| `list_named_locations` | List named locations |
 
-- *"List all non-compliant devices"*
-- *"Show me details for device XYZ"*
-- *"Sync all devices for user john@company.com"*
-- *"What apps are assigned to the Sales group?"*
-- *"List Windows Autopilot devices"*
+### Authentication & Security
+| Tool | Description |
+|------|-------------|
+| `get_user_authentication_methods` | List auth methods |
+| `get_user_mfa_status` | Check MFA status |
+| `get_sign_in_logs` | Get sign-in logs |
+| `get_risky_users` | List risky users |
+| `get_risk_detections` | Get risk detections |
+| `get_directory_audit_logs` | Get audit logs |
 
-## ⚠️ Security Notes
+### Cloud PC
+| Tool | Description |
+|------|-------------|
+| `list_cloud_pcs` | List all Cloud PCs |
+| `get_cloud_pc_details` | Get Cloud PC details |
+| `restart_cloud_pc` | Restart Cloud PC |
+| `reprovision_cloud_pc` | Reprovision Cloud PC |
+| `list_provisioning_policies` | List provisioning policies |
 
-- **Never commit `.env` files** to version control
-- Destructive actions (wipe, retire) require explicit `confirm=True`
-- Use **least privilege** - only grant necessary permissions
-- Test in a **non-production tenant** first
+### Reports
+| Tool | Description |
+|------|-------------|
+| `get_device_compliance_report` | Compliance summary |
+| `get_device_configuration_status` | Config profile status |
+| `get_app_installation_status` | App install status |
+| `get_license_usage_report` | License usage |
 
-## 🤝 Contributing
+## 🔒 Security Considerations
 
-Contributions are welcome! Please:
+1. **Client Secret Protection**: Never commit client secrets to version control
+2. **Least Privilege**: Grant only required permissions
+3. **Audit Logging**: Monitor API usage through Azure AD logs
+4. **Destructive Actions**: All destructive operations require `confirm=True`
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📝 Example Usage
+
+Once configured, you can ask Claude to:
+
+- "List all Windows devices in my tenant"
+- "Show me non-compliant devices"
+- "Create a new user john.doe@company.com"
+- "Reset password for user X"
+- "List all Conditional Access policies"
+- "Show MFA status for user X"
+- "Get Cloud PC overview"
+- "Show me license usage"
+- "List Global Administrators"
+
+## 🆘 Troubleshooting
+
+### Connection Issues
+- Verify TENANT_ID, CLIENT_ID, and CLIENT_SECRET are correct
+- Check app registration permissions in Azure Portal
+- Ensure admin consent is granted for permissions
+
+### Permission Errors
+- Review required permissions above
+- Grant admin consent in Azure Portal
+- Some features require specific licenses (e.g., Entra ID P1/P2)
+
+### Beta API Features
+- Some features use Microsoft Graph beta endpoints
+- Beta APIs may change without notice
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License
 
-## 👨‍💻 Author
+## 🤝 Contributing
 
-**Sujin Nelladath** - Microsoft Graph MVP
-
-- GitHub: [@nelladath](https://github.com/nelladath)
-- LinkedIn: [sujin-nelladath](https://www.linkedin.com/in/sujin-nelladath-8911968a)
-
-## 🙏 Acknowledgments
-
-- [Model Context Protocol](https://modelcontextprotocol.io/) by Anthropic
-- [Microsoft Graph API](https://docs.microsoft.com/graph/)
-- [Cursor IDE](https://cursor.sh/)
+Contributions welcome! Please feel free to submit issues and pull requests.
