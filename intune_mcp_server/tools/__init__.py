@@ -12,6 +12,7 @@ This package contains all tool modules for the MCP server:
 - tenant_admin: Tenant administration
 - scripts: PowerShell scripts and remediations
 - security: Security baselines and endpoint protection
+- app_registrations: App registrations and enterprise applications
 """
 
 from . import entra_users
@@ -24,6 +25,7 @@ from . import cloud_pc
 from . import tenant_admin
 from . import scripts
 from . import security
+from . import app_registrations
 
 __all__ = [
     'entra_users',
@@ -36,4 +38,5 @@ __all__ = [
     'tenant_admin',
     'scripts',
     'security',
+    'app_registrations',
 ]

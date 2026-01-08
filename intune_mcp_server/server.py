@@ -35,6 +35,7 @@ from intune_mcp_server.tools import tenant_admin
 from intune_mcp_server.tools import scripts
 from intune_mcp_server.tools import security
 from intune_mcp_server.tools import entra_devices
+from intune_mcp_server.tools import app_registrations
 
 # Create the MCP server instance using FastMCP
 mcp = FastMCP("intune-entra-mcp-server")
@@ -726,14 +727,67 @@ async def get_subscriptions() -> dict[str, Any]:
     return await tenant_admin.get_subscriptions()
 
 @mcp.tool()
-async def list_app_registrations(top: int = 50) -> dict[str, Any]:
-    """List all app registrations in the tenant."""
-    return await tenant_admin.list_app_registrations(top)
-
-@mcp.tool()
 async def get_security_defaults_status() -> dict[str, Any]:
     """Get the status of security defaults for the tenant."""
     return await tenant_admin.get_security_defaults_status()
+
+
+# ============== APP REGISTRATION & ENTERPRISE APP TOOLS ==============
+
+@mcp.tool()
+async def list_app_registrations(top: int = 50) -> dict[str, Any]:
+    """List all app registrations with credential expiry information."""
+    return await app_registrations.list_app_registrations_with_credentials(top)
+
+@mcp.tool()
+async def get_app_registration(app_id: str) -> dict[str, Any]:
+    """Get comprehensive details of an app registration including permissions and credentials."""
+    return await app_registrations.get_app_registration_details(app_id)
+
+@mcp.tool()
+async def search_app_registrations(search_term: str) -> dict[str, Any]:
+    """Search for app registrations by name."""
+    return await app_registrations.search_app_registrations(search_term)
+
+@mcp.tool()
+async def list_enterprise_apps(top: int = 50, app_type: str = None) -> dict[str, Any]:
+    """List enterprise applications (service principals). Filter by type: Application, ManagedIdentity, Legacy."""
+    return await app_registrations.list_enterprise_apps(top, app_type)
+
+@mcp.tool()
+async def get_enterprise_app(sp_id: str) -> dict[str, Any]:
+    """Get comprehensive details of an enterprise application including permissions and assignments."""
+    return await app_registrations.get_enterprise_app_details(sp_id)
+
+@mcp.tool()
+async def search_enterprise_apps(search_term: str) -> dict[str, Any]:
+    """Search for enterprise applications by name."""
+    return await app_registrations.search_enterprise_apps(search_term)
+
+@mcp.tool()
+async def get_app_permissions(sp_id: str) -> dict[str, Any]:
+    """Get all permissions granted to an enterprise application."""
+    return await app_registrations.get_app_permissions_granted(sp_id)
+
+@mcp.tool()
+async def enable_enterprise_app(sp_id: str) -> dict[str, Any]:
+    """Enable an enterprise application."""
+    return await app_registrations.enable_enterprise_app(sp_id)
+
+@mcp.tool()
+async def disable_enterprise_app(sp_id: str) -> dict[str, Any]:
+    """Disable an enterprise application."""
+    return await app_registrations.disable_enterprise_app(sp_id)
+
+@mcp.tool()
+async def get_credentials_expiring_soon(days: int = 30) -> dict[str, Any]:
+    """Get all app registrations with credentials expiring within specified days."""
+    return await app_registrations.get_credentials_expiring_soon(days)
+
+@mcp.tool()
+async def delete_app_registration(app_id: str, confirm: bool = False) -> dict[str, Any]:
+    """Delete an app registration. Requires confirm=True."""
+    return await app_registrations.delete_app_registration(app_id, confirm)
 
 
 # ============== SCRIPTS TOOLS ==============
