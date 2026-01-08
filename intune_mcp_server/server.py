@@ -861,6 +861,29 @@ async def create_device_category(display_name: str, description: str = "") -> di
     return await security.create_device_category(display_name, description)
 
 
+# ============== ANTIMALWARE REPORTS ==============
+
+@mcp.tool()
+async def get_windows_malware_report(top: int = 100) -> dict[str, Any]:
+    """Get Windows malware information detected across devices."""
+    return await security.get_windows_malware_report(top)
+
+@mcp.tool()
+async def get_device_protection_overview() -> dict[str, Any]:
+    """Get overall device protection status overview."""
+    return await security.get_device_protection_overview()
+
+@mcp.tool()
+async def get_device_threat_state(top: int = 100) -> dict[str, Any]:
+    """Get threat state for all managed Windows devices including Defender status."""
+    return await security.get_device_threat_state(top)
+
+@mcp.tool()
+async def get_detected_malware_on_device(device_id: str) -> dict[str, Any]:
+    """Get detected malware and protection state for a specific device."""
+    return await security.get_detected_malware_on_device(device_id)
+
+
 # ============== ENTRA ID DEVICE TOOLS ==============
 
 @mcp.tool()

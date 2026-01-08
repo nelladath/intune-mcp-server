@@ -354,6 +354,256 @@ async def get_defender_status() -> dict[str, Any]:
     }
 
 
+# ============== ANTIMALWARE REPORTS ==============
+
+async def get_windows_malware_report(top: int = 100) -> dict[str, Any]:
+    """
+    Get Windows malware information detected across devices.
+    
+    Args:
+        top: Maximum number of malware entries to return
+    
+    Returns:
+        List of detected malware with affected devices
+    """
+    client = get_graph_client()
+    
+    try:
+        response = await client.get(
+            f"/deviceManagement/windowsMalwareInformation?$top={top}&$expand=deviceMalwareStates"
+        )
+        malware_list = response.get("value", [])
+        
+        # Categorize by severity
+        severity_counts = {"severe": 0, "high": 0, "moderate": 0, "low": 0, "unknown": 0}
+        category_counts = {}
+        
+        malware_details = []
+        for m in malware_list:
+            severity = m.get("severity", "unknown").lower()
+            if severity in severity_counts:
+                severity_counts[severity] += 1
+            else:
+                severity_counts["unknown"] += 1
+            
+            category = m.get("category", "unknown")
+            category_counts[category] = category_counts.get(category, 0) + 1
+            
+            device_states = m.get("deviceMalwareStates", [])
+            
+            malware_details.append({
+                "id": m.get("id"),
+                "displayName": m.get("displayName"),
+                "severity": m.get("severity"),
+                "category": m.get("category"),
+                "additionalInformationUrl": m.get("additionalInformationUrl"),
+                "lastDetectionDateTime": m.get("lastDetectionDateTime"),
+                "affectedDeviceCount": len(device_states),
+                "affectedDevices": [
+                    {
+                        "deviceName": ds.get("deviceName"),
+                        "detectionState": ds.get("detectionState"),
+                        "lastStateChangeDateTime": ds.get("lastStateChangeDateTime"),
+                        "executionState": ds.get("executionState"),
+                    }
+                    for ds in device_states[:5]  # Limit to 5 devices per malware
+                ]
+            })
+        
+        return {
+            "summary": {
+                "total_malware_detected": len(malware_list),
+                "by_severity": severity_counts,
+                "by_category": category_counts
+            },
+            "malware": malware_details
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Could not retrieve malware information: {str(e)}",
+            "note": "This may require DeviceManagementManagedDevices.Read.All permission"
+        }
+
+
+async def get_device_protection_overview() -> dict[str, Any]:
+    """
+    Get overall device protection status overview.
+    
+    Returns:
+        Protection status summary across all devices
+    """
+    client = get_graph_client()
+    
+    try:
+        # Try to get protection overview (beta endpoint)
+        overview = await client.get(
+            "/deviceManagement/deviceProtectionOverview",
+            use_beta=True
+        )
+        
+        return {
+            "totalReportedDeviceCount": overview.get("totalReportedDeviceCount"),
+            "inactiveThreatAgentDeviceCount": overview.get("inactiveThreatAgentDeviceCount"),
+            "unknownStateThreatAgentDeviceCount": overview.get("unknownStateThreatAgentDeviceCount"),
+            "pendingSignatureUpdateDeviceCount": overview.get("pendingSignatureUpdateDeviceCount"),
+            "cleanDeviceCount": overview.get("cleanDeviceCount"),
+            "pendingFullScanDeviceCount": overview.get("pendingFullScanDeviceCount"),
+            "pendingRestartDeviceCount": overview.get("pendingRestartDeviceCount"),
+            "pendingManualStepsDeviceCount": overview.get("pendingManualStepsDeviceCount"),
+            "pendingOfflineScanDeviceCount": overview.get("pendingOfflineScanDeviceCount"),
+            "criticalFailuresDeviceCount": overview.get("criticalFailuresDeviceCount"),
+            "pendingQuickScanDeviceCount": overview.get("pendingQuickScanDeviceCount"),
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Could not retrieve protection overview: {str(e)}"
+        }
+
+
+async def get_device_threat_state(top: int = 100) -> dict[str, Any]:
+    """
+    Get threat state for all managed Windows devices.
+    
+    Args:
+        top: Maximum number of devices to return
+    
+    Returns:
+        Device threat states
+    """
+    client = get_graph_client()
+    
+    try:
+        # Get Windows devices with protection state
+        response = await client.get(
+            f"/deviceManagement/managedDevices?$filter=operatingSystem eq 'Windows'&$select=id,deviceName,userPrincipalName,lastSyncDateTime,complianceState&$top={top}"
+        )
+        devices = response.get("value", [])
+        
+        device_threats = []
+        threat_counts = {"clean": 0, "fullScanRequired": 0, "rebootRequired": 0, "manualStepsRequired": 0, "offlineScanRequired": 0, "unknown": 0}
+        
+        for device in devices:
+            device_id = device.get("id")
+            
+            # Try to get protection state for each device
+            try:
+                protection_state = await client.get(
+                    f"/deviceManagement/managedDevices/{device_id}/windowsProtectionState",
+                    use_beta=True
+                )
+                
+                threat_status = protection_state.get("deviceProtectionState", "unknown")
+                if threat_status in threat_counts:
+                    threat_counts[threat_status] += 1
+                else:
+                    threat_counts["unknown"] += 1
+                
+                device_threats.append({
+                    "deviceName": device.get("deviceName"),
+                    "userPrincipalName": device.get("userPrincipalName"),
+                    "lastSyncDateTime": device.get("lastSyncDateTime"),
+                    "deviceProtectionState": threat_status,
+                    "antiMalwareVersion": protection_state.get("antiMalwareVersion"),
+                    "engineVersion": protection_state.get("engineVersion"),
+                    "signatureVersion": protection_state.get("signatureVersion"),
+                    "lastQuickScanDateTime": protection_state.get("lastQuickScanDateTime"),
+                    "lastFullScanDateTime": protection_state.get("lastFullScanDateTime"),
+                    "lastQuickScanSignatureVersion": protection_state.get("lastQuickScanSignatureVersion"),
+                    "lastFullScanSignatureVersion": protection_state.get("lastFullScanSignatureVersion"),
+                    "productStatus": protection_state.get("productStatus"),
+                    "isVirtualMachine": protection_state.get("isVirtualMachine"),
+                    "tamperProtectionEnabled": protection_state.get("tamperProtectionEnabled"),
+                })
+            except:
+                device_threats.append({
+                    "deviceName": device.get("deviceName"),
+                    "userPrincipalName": device.get("userPrincipalName"),
+                    "lastSyncDateTime": device.get("lastSyncDateTime"),
+                    "deviceProtectionState": "unknown",
+                    "note": "Could not retrieve protection state"
+                })
+                threat_counts["unknown"] += 1
+        
+        return {
+            "summary": {
+                "total_devices": len(devices),
+                "by_threat_state": threat_counts
+            },
+            "devices": device_threats
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Could not retrieve device threat states: {str(e)}"
+        }
+
+
+async def get_detected_malware_on_device(device_id: str) -> dict[str, Any]:
+    """
+    Get detected malware for a specific device.
+    
+    Args:
+        device_id: The managed device ID
+    
+    Returns:
+        Malware detected on the device
+    """
+    client = get_graph_client()
+    
+    try:
+        # Get device info
+        device = await client.get(
+            f"/deviceManagement/managedDevices/{device_id}?$select=deviceName,userPrincipalName"
+        )
+        
+        # Get detected apps (including malware)
+        detected = await client.get(
+            f"/deviceManagement/managedDevices/{device_id}/detectedApps"
+        )
+        detected_apps = detected.get("value", [])
+        
+        # Get protection state
+        try:
+            protection = await client.get(
+                f"/deviceManagement/managedDevices/{device_id}/windowsProtectionState",
+                use_beta=True
+            )
+        except:
+            protection = {}
+        
+        return {
+            "device": {
+                "deviceName": device.get("deviceName"),
+                "userPrincipalName": device.get("userPrincipalName"),
+            },
+            "protectionState": {
+                "deviceProtectionState": protection.get("deviceProtectionState"),
+                "antiMalwareVersion": protection.get("antiMalwareVersion"),
+                "lastQuickScanDateTime": protection.get("lastQuickScanDateTime"),
+                "lastFullScanDateTime": protection.get("lastFullScanDateTime"),
+                "malwareProtectionEnabled": protection.get("malwareProtectionEnabled"),
+                "networkInspectionSystemEnabled": protection.get("networkInspectionSystemEnabled"),
+                "realTimeProtectionEnabled": protection.get("realTimeProtectionEnabled"),
+            },
+            "detectedApps": [
+                {
+                    "displayName": app.get("displayName"),
+                    "version": app.get("version"),
+                    "sizeInByte": app.get("sizeInByte"),
+                    "deviceCount": app.get("deviceCount"),
+                }
+                for app in detected_apps[:50]
+            ]
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Could not retrieve malware info for device: {str(e)}"
+        }
+
+
 # ============== APP PROTECTION POLICIES (MAM) ==============
 
 async def list_app_protection_policies() -> dict[str, Any]:
