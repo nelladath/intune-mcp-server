@@ -1,0 +1,283 @@
+#,Category,Tool Name,Description,HTTP Method,Graph API Endpoint (relative to https://graph.microsoft.com/{version}),API Version,Required Application Permission,Access Type,Status
+1,Core,test_connection,Test Microsoft Graph API connection / tenant info,GET,/organization,v1.0,Organization.Read.All,Read,EXISTING
+2,Core,get_intune_overview,Device counts + compliance summary overview,GET,/deviceManagement/managedDeviceOverview,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+3,Intune Device Management,list_managed_devices,List all Intune managed devices,GET,/deviceManagement/managedDevices,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+4,Intune Device Management,get_device_details,Get device by ID,GET,/deviceManagement/managedDevices/{id},v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+5,Intune Device Management,search_devices,Search devices by name/user/serial,GET,/deviceManagement/managedDevices?$filter=...,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+6,Intune Device Management,get_noncompliant_devices,List non-compliant devices,GET,/deviceManagement/managedDevices?$filter=complianceState eq 'noncompliant',v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+7,Intune Device Management,sync_device,Trigger device sync,POST,/deviceManagement/managedDevices/{id}/syncDevice,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+8,Intune Device Management,restart_device,Remote restart device,POST,/deviceManagement/managedDevices/{id}/rebootNow,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+9,Intune Device Management,remote_lock_device,Remote lock device,POST,/deviceManagement/managedDevices/{id}/remoteLock,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+10,Intune Device Management,wipe_device,Wipe device (destructive confirm=True),POST,/deviceManagement/managedDevices/{id}/wipe,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+11,Intune Device Management,retire_device,Retire device / remove company data,POST,/deviceManagement/managedDevices/{id}/retire,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+12,Device Inventory & Advanced Mgmt,get_device_hardware_inventory,Hardware inventory for a device,GET,/deviceManagement/managedDevices/{id}?$select=hardwareInformation,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+13,Device Inventory & Advanced Mgmt,get_device_installed_apps,Installed apps on a device,GET,/deviceManagement/managedDevices/{id}/detectedApps,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+14,Device Inventory & Advanced Mgmt,rename_device,Rename a managed device,POST,/deviceManagement/managedDevices/{id}/setDeviceName,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+15,Device Inventory & Advanced Mgmt,bulk_sync_devices,Sync multiple devices (looped calls),POST,/deviceManagement/managedDevices/{id}/syncDevice,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+16,Device Inventory & Advanced Mgmt,get_device_network_info,Network info for a device,GET,/deviceManagement/managedDevices/{id}?$select=wifiMacAddress&ethernetMacAddress&subnetAddress,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+17,Device Inventory & Advanced Mgmt,get_stale_devices_report,Devices inactive N days,GET,/deviceManagement/managedDevices?$filter=lastSyncDateTime le {date},v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+18,Autopilot,list_autopilot_devices,List Windows Autopilot devices,GET,/deviceManagement/windowsAutopilotDeviceIdentities,v1.0,DeviceManagementServiceConfig.Read.All,Read,EXISTING
+19,Autopilot,list_autopilot_profiles,List Autopilot deployment profiles,GET,/deviceManagement/windowsAutopilotDeploymentProfiles,v1.0,DeviceManagementServiceConfig.Read.All,Read,EXISTING
+20,Policy Management,list_compliance_policies,List device compliance policies,GET,/deviceManagement/deviceCompliancePolicies,v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+21,Policy Management,list_configuration_profiles,List device configuration profiles,GET,/deviceManagement/deviceConfigurations,v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+22,App Management,list_mobile_apps,List mobile apps,GET,/deviceAppManagement/mobileApps,v1.0,DeviceManagementApps.Read.All,Read,EXISTING
+23,App Management,get_app_details,Get app details,GET,/deviceAppManagement/mobileApps/{id},v1.0,DeviceManagementApps.Read.All,Read,EXISTING
+24,App Management,search_apps,Search apps by name,GET,/deviceAppManagement/mobileApps?$filter=...,v1.0,DeviceManagementApps.Read.All,Read,EXISTING
+25,App Management,assign_app_to_group,Assign app to group (required/available/uninstall),POST,/deviceAppManagement/mobileApps/{id}/assign,v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,EXISTING
+26,App Management,remove_all_app_assignments,Remove all assignments for an app (confirm=True),DELETE,/deviceAppManagement/mobileApps/{id}/assignments/{assignmentId},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,EXISTING
+27,Entra ID User Management,list_users,List tenant users,GET,/users,v1.0,User.Read.All,Read,EXISTING
+28,Entra ID User Management,get_user,Get user by ID or UPN,GET,/users/{id | userPrincipalName},v1.0,User.Read.All,Read,EXISTING
+29,Entra ID User Management,search_users,Search users by name,GET,/users?$search=displayName:...,v1.0,User.Read.All,Read,EXISTING
+30,Entra ID User Management,create_user,Create a new Entra ID user,POST,/users,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+31,Entra ID User Management,update_user,Update user properties,PATCH,/users/{id},v1.0,User.ReadWrite.All,Read.Write,EXISTING
+32,Entra ID User Management,delete_user,Delete a user (confirm=True),DELETE,/users/{id},v1.0,User.ReadWrite.All,Read.Write,EXISTING
+33,Entra ID User Management,enable_user,Enable a user account,PATCH,/users/{id} (accountEnabled: true),v1.0,User.ReadWrite.All,Read.Write,EXISTING
+34,Entra ID User Management,disable_user,Disable a user / block sign-in,PATCH,/users/{id} (accountEnabled: false),v1.0,User.ReadWrite.All,Read.Write,EXISTING
+35,Entra ID User Management,reset_user_password,Reset user password,PATCH,/users/{id} (passwordProfile),v1.0,User.ReadWrite.All,Read.Write,EXISTING
+36,Entra ID User Management,revoke_user_sessions,Revoke all refresh tokens,POST,/users/{id}/revokeSignInSessions,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+37,Entra ID User Management,get_user_devices,List managed devices for a user,GET,/users/{id}/managedDevices,v1.0,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+38,Entra ID User Management,get_user_licenses,Get license assignments for a user,GET,/users/{id}/licenseDetails,v1.0,User.Read.All,Read,EXISTING
+39,Entra ID User Management,assign_license,Assign a license to a user,POST,/users/{id}/assignLicense,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+40,Entra ID User Management,remove_license,Remove a license from a user,POST,/users/{id}/assignLicense (removeLicenses),v1.0,User.ReadWrite.All,Read.Write,EXISTING
+41,Entra ID User Management,list_available_licenses,List available license SKUs,GET,/subscribedSkus,v1.0,Organization.Read.All,Read,EXISTING
+42,Entra ID User Management,get_deleted_users,List recently deleted users,GET,/directory/deletedItems/microsoft.graph.user,v1.0,User.Read.All,Read,EXISTING
+43,Entra ID User Management,restore_deleted_user,Restore a deleted user,POST,/directory/deletedItems/{id}/restore,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+44,Entra ID User Management,assign_manager,Assign a manager to a user,PUT,/users/{id}/manager/$ref,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+45,Entra ID User Management,remove_manager,Remove a user's manager,DELETE,/users/{id}/manager/$ref,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+46,Entra ID User Management,get_direct_reports,List direct reports for a user,GET,/users/{id}/directReports,v1.0,User.Read.All,Read,EXISTING
+47,Entra ID User Management,onboard_user,Create user + manager + licenses + groups (multi-call),POST,/users + /users/{id}/manager/$ref + /users/{id}/assignLicense + /groups/{id}/members/$ref,v1.0,User.ReadWrite.All & Group.ReadWrite.All,Read.Write,EXISTING
+48,Entra ID User Management,offboard_user,Block sign-in / revoke sessions / remove groups & licenses,PATCH/POST/DELETE,/users/{id} + /users/{id}/revokeSignInSessions + /users/{id}/memberOf/{grp}/$ref,v1.0,User.ReadWrite.All & Group.ReadWrite.All,Read.Write,EXISTING
+49,Entra ID User Management,bulk_create_users,Create multiple users (looped calls),POST,/users,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+50,Entra ID User Management,bulk_assign_licenses,Assign license to multiple users (looped),POST,/users/{id}/assignLicense,v1.0,User.ReadWrite.All,Read.Write,EXISTING
+51,Entra ID User Management,bulk_add_to_group,Add multiple users to a group (looped),POST,/groups/{id}/members/$ref,v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+52,Entra ID Device Management,list_entra_devices,List Entra ID devices,GET,/devices,v1.0,Directory.Read.All,Read,EXISTING
+53,Entra ID Device Management,search_entra_devices,Search Entra devices by display name,GET,/devices?$filter=startswith(displayName&'...'),v1.0,Directory.Read.All,Read,EXISTING
+54,Entra ID Device Management,get_entra_device,Get Entra ID device details,GET,/devices/{id},v1.0,Directory.Read.All,Read,EXISTING
+55,Entra ID Device Management,delete_entra_device,Delete device from Entra ID (confirm=True),DELETE,/devices/{id},v1.0,Directory.ReadWrite.All,Read.Write,EXISTING
+56,Entra ID Device Management,delete_intune_device,Delete device from Intune (confirm=True),DELETE,/deviceManagement/managedDevices/{id},v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,EXISTING
+57,Entra ID Device Management,delete_device_from_all,Delete from both Intune and Entra (confirm=True),DELETE,/deviceManagement/managedDevices/{id} + /devices/{id},v1.0,DeviceManagementManagedDevices.ReadWrite.All & Directory.ReadWrite.All,Read.Write,EXISTING
+58,Entra ID Device Management,disable_entra_device,Disable device in Entra ID,PATCH,/devices/{id} (accountEnabled: false),v1.0,Directory.ReadWrite.All,Read.Write,EXISTING
+59,Entra ID Device Management,enable_entra_device,Enable device in Entra ID,PATCH,/devices/{id} (accountEnabled: true),v1.0,Directory.ReadWrite.All,Read.Write,EXISTING
+60,Group Management,list_groups,List Azure AD groups,GET,/groups,v1.0,Group.Read.All,Read,EXISTING
+61,Group Management,search_groups,Search groups by name,GET,/groups?$filter=startswith(displayName&'...'),v1.0,Group.Read.All,Read,EXISTING
+62,Group Management,get_group,Get group details,GET,/groups/{id},v1.0,Group.Read.All,Read,EXISTING
+63,Group Management,create_security_group,Create a security group,POST,/groups,v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+64,Group Management,create_microsoft365_group,Create a Microsoft 365 group,POST,/groups (groupTypes: Unified),v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+65,Group Management,create_dynamic_security_group,Create dynamic group with membership rule,POST,/groups (membershipRule & membershipRuleProcessingState),v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+66,Group Management,delete_group,Delete a group (confirm=True),DELETE,/groups/{id},v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+67,Group Management,get_group_members,List members of a group,GET,/groups/{id}/members,v1.0,Group.Read.All,Read,EXISTING
+68,Group Management,add_group_member,Add a member to a group,POST,/groups/{id}/members/$ref,v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+69,Group Management,remove_group_member,Remove a member from a group,DELETE,/groups/{id}/members/{id}/$ref,v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+70,Group Management,get_group_owners,List owners of a group,GET,/groups/{id}/owners,v1.0,Group.Read.All,Read,EXISTING
+71,Group Management,add_group_owner,Add an owner to a group,POST,/groups/{id}/owners/$ref,v1.0,Group.ReadWrite.All,Read.Write,EXISTING
+72,Conditional Access,list_conditional_access_policies,List all CA policies,GET,/identity/conditionalAccess/policies,v1.0,Policy.Read.All,Read,EXISTING
+73,Conditional Access,get_conditional_access_policy,Get details for a CA policy,GET,/identity/conditionalAccess/policies/{id},v1.0,Policy.Read.All,Read,EXISTING
+74,Conditional Access,enable_conditional_access_policy,Enable a CA policy,PATCH,/identity/conditionalAccess/policies/{id} (state: enabled),v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,EXISTING
+75,Conditional Access,disable_conditional_access_policy,Disable a CA policy,PATCH,/identity/conditionalAccess/policies/{id} (state: disabled),v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,EXISTING
+76,Conditional Access,list_named_locations,List named locations,GET,/identity/conditionalAccess/namedLocations,v1.0,Policy.Read.All,Read,EXISTING
+77,Authentication & Identity Protection,get_user_authentication_methods,List auth methods for a user,GET,/users/{id}/authentication/methods,v1.0,UserAuthenticationMethod.Read.All,Read,EXISTING
+78,Authentication & Identity Protection,get_user_mfa_status,Check MFA status/registered methods,GET,/reports/authenticationMethods/userRegistrationDetails/{id},beta,UserAuthenticationMethod.Read.All & Reports.Read.All,Read,EXISTING
+79,Authentication & Identity Protection,get_sign_in_logs,Sign-in logs (filter user/status/date),GET,/auditLogs/signIns,v1.0,AuditLog.Read.All,Read,EXISTING
+80,Authentication & Identity Protection,get_risky_users,List risky users,GET,/identityProtection/riskyUsers,v1.0,IdentityRiskyUser.Read.All,Read,EXISTING
+81,Authentication & Identity Protection,get_risk_detections,Get risk detections,GET,/identityProtection/riskDetections,v1.0,IdentityRiskEvent.Read.All,Read,EXISTING
+82,Authentication & Identity Protection,dismiss_risky_user,Dismiss risk for a user,POST,/identityProtection/riskyUsers/dismiss,v1.0,IdentityRiskyUser.ReadWrite.All,Read.Write,EXISTING
+83,Authentication & Identity Protection,get_directory_audit_logs,Directory audit logs (category/date filter),GET,/auditLogs/directoryAudits,v1.0,AuditLog.Read.All,Read,EXISTING
+84,App Registrations & Enterprise Apps,list_app_registrations,List app registrations + credential expiry,GET,/applications,v1.0,Application.Read.All,Read,EXISTING
+85,App Registrations & Enterprise Apps,get_app_registration,Get app registration (perms & credentials),GET,/applications/{id},v1.0,Application.Read.All,Read,EXISTING
+86,App Registrations & Enterprise Apps,search_app_registrations,Search app registrations by name,GET,/applications?$filter=startswith(displayName&'...'),v1.0,Application.Read.All,Read,EXISTING
+87,App Registrations & Enterprise Apps,list_enterprise_apps,List enterprise apps (service principals),GET,/servicePrincipals,v1.0,Application.Read.All,Read,EXISTING
+88,App Registrations & Enterprise Apps,get_enterprise_app,Get enterprise app details,GET,/servicePrincipals/{id},v1.0,Application.Read.All,Read,EXISTING
+89,App Registrations & Enterprise Apps,search_enterprise_apps,Search enterprise apps by name,GET,/servicePrincipals?$filter=startswith(displayName&'...'),v1.0,Application.Read.All,Read,EXISTING
+90,App Registrations & Enterprise Apps,get_app_permissions,Permissions granted to an enterprise app,GET,/servicePrincipals/{id}/appRoleAssignments & /oauth2PermissionGrants,v1.0,Application.Read.All,Read,EXISTING
+91,App Registrations & Enterprise Apps,enable_enterprise_app,Enable an enterprise app,PATCH,/servicePrincipals/{id} (accountEnabled: true),v1.0,Application.ReadWrite.All,Read.Write,EXISTING
+92,App Registrations & Enterprise Apps,disable_enterprise_app,Disable an enterprise app,PATCH,/servicePrincipals/{id} (accountEnabled: false),v1.0,Application.ReadWrite.All,Read.Write,EXISTING
+93,App Registrations & Enterprise Apps,get_credentials_expiring_soon,App regs with credentials expiring in N days,GET,/applications?$select=passwordCredentials&keyCredentials,v1.0,Application.Read.All,Read,EXISTING
+94,App Registrations & Enterprise Apps,delete_app_registration,Delete an app registration (confirm=True),DELETE,/applications/{id},v1.0,Application.ReadWrite.All,Read.Write,EXISTING
+95,Windows 365 Cloud PC,list_cloud_pcs,List all Cloud PCs,GET,/deviceManagement/virtualEndpoint/cloudPCs,v1.0,CloudPC.Read.All,Read,EXISTING
+96,Windows 365 Cloud PC,get_cloud_pc_details,Get details for a Cloud PC,GET,/deviceManagement/virtualEndpoint/cloudPCs/{id},v1.0,CloudPC.Read.All,Read,EXISTING
+97,Windows 365 Cloud PC,restart_cloud_pc,Restart a Cloud PC,POST,/deviceManagement/virtualEndpoint/cloudPCs/{id}/reboot,v1.0,CloudPC.ReadWrite.All,Read.Write,EXISTING
+98,Windows 365 Cloud PC,reprovision_cloud_pc,Reprovision a Cloud PC (confirm=True),POST,/deviceManagement/virtualEndpoint/cloudPCs/{id}/reprovision,v1.0,CloudPC.ReadWrite.All,Read.Write,EXISTING
+99,Windows 365 Cloud PC,list_provisioning_policies,List Cloud PC provisioning policies,GET,/deviceManagement/virtualEndpoint/provisioningPolicies,v1.0,CloudPC.Read.All,Read,EXISTING
+100,Windows 365 Cloud PC,list_gallery_images,List gallery images for provisioning,GET,/deviceManagement/virtualEndpoint/galleryImages,v1.0,CloudPC.Read.All,Read,EXISTING
+101,Windows 365 Cloud PC,get_cloud_pc_overview,Cloud PC overview and summary,GET,/deviceManagement/virtualEndpoint/reports (or /cloudPCs aggregate),v1.0/beta,CloudPC.Read.All,Read,EXISTING
+102,Tenant Administration,get_organization_info,Get organization/tenant info,GET,/organization,v1.0,Organization.Read.All,Read,EXISTING
+103,Tenant Administration,get_tenant_domains,List domains for the tenant,GET,/domains,v1.0,Domain.Read.All,Read,EXISTING
+104,Tenant Administration,get_service_health,M365 service health status,GET,/admin/serviceAnnouncement/healthOverviews,v1.0,ServiceHealth.Read.All,Read,EXISTING
+105,Tenant Administration,get_service_issues,Current/recent service issues (filter by service),GET,/admin/serviceAnnouncement/issues,v1.0,ServiceHealth.Read.All,Read,EXISTING
+106,Tenant Administration,list_directory_roles,List active directory roles,GET,/directoryRoles,v1.0,RoleManagement.Read.Directory,Read,EXISTING
+107,Tenant Administration,get_directory_role_members,List members of a directory role,GET,/directoryRoles/{id}/members,v1.0,RoleManagement.Read.Directory,Read,EXISTING
+108,Tenant Administration,get_global_admins,List Global Administrator role members,GET,/directoryRoles(roleTemplateId='62e90394-69f5-4237-9190-012177145e10')/members,v1.0,RoleManagement.Read.Directory,Read,EXISTING
+109,Tenant Administration,get_subscriptions,List subscribed SKUs (licenses),GET,/subscribedSkus,v1.0,Organization.Read.All,Read,EXISTING
+110,Tenant Administration,get_security_defaults_status,Check security defaults status,GET,/policies/identitySecurityDefaultsEnforcementPolicy,v1.0,Policy.Read.All,Read,EXISTING
+111,Tenant Administration,assign_directory_role,Assign a directory role to a user/group,POST,/directoryRoles/{id}/members/$ref,v1.0,RoleManagement.ReadWrite.Directory,Read.Write,EXISTING
+112,Scripts & Remediations,list_device_management_scripts,List PowerShell scripts in Intune,GET,/deviceManagement/deviceManagementScripts,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+113,Scripts & Remediations,get_device_management_script,Get details for a PowerShell script,GET,/deviceManagement/deviceManagementScripts/{id},beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+114,Scripts & Remediations,get_script_device_status,Deployment status for a script,GET,/deviceManagement/deviceManagementScripts/{id}/deviceRunStates,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+115,Scripts & Remediations,list_device_health_scripts,List proactive remediation scripts,GET,/deviceManagement/deviceHealthScripts,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+116,Scripts & Remediations,get_device_health_script,Get details for a remediation script,GET,/deviceManagement/deviceHealthScripts/{id},beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+117,Scripts & Remediations,get_device_health_script_status,Status summary for a remediation script,GET,/deviceManagement/deviceHealthScripts/{id}/deviceRunStates,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+118,Security & Compliance,list_security_baselines,List security baseline templates,GET,/deviceManagement/templates,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+119,Security & Compliance,list_security_baseline_profiles,List deployed security baseline profiles,GET,/deviceManagement/intents,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+120,Security & Compliance,get_security_baseline_status,Deployment status for a baseline,GET,/deviceManagement/intents/{id}/deviceStates,beta,DeviceManagementConfiguration.Read.All,Read,EXISTING
+121,Security & Compliance,list_app_protection_policies,List app protection (MAM) policies,GET,/deviceAppManagement/managedAppPolicies,v1.0,DeviceManagementApps.Read.All,Read,EXISTING
+122,Security & Compliance,list_enrollment_restrictions,List device enrollment restrictions,GET,/deviceManagement/deviceEnrollmentConfigurations,v1.0,DeviceManagementServiceConfig.Read.All,Read,EXISTING
+123,Security & Compliance,list_device_categories,List device categories,GET,/deviceManagement/deviceCategories,v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+124,Security & Compliance,create_device_category,Create a device category,POST,/deviceManagement/deviceCategories,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,EXISTING
+125,Security & Compliance,get_windows_malware_report,Windows malware report,POST,/deviceManagement/reports/getWindowsProtectionStateSummaryReport,beta,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+126,Security & Compliance,get_device_protection_overview,Device protection status overview,GET,/deviceManagement/managedDeviceOverview (windowsProtectionState),v1.0/beta,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+127,Security & Compliance,get_device_threat_state,Threat state for managed Windows devices,GET,/deviceManagement/managedDevices?$select=... (windowsProtectionState),v1.0/beta,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+128,Security & Compliance,get_detected_malware_on_device,Detected malware for a device,GET,/deviceManagement/managedDevices/{id}/windowsProtectionState/detectedMalwareState,beta,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+129,Reports,get_device_compliance_report,Device compliance summary,POST,/deviceManagement/reports/getComplianceReport (or GET deviceCompliancePolicyDeviceStateSummary),beta/v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+130,Reports,get_device_configuration_status,Deployment status for a config profile,GET,/deviceManagement/deviceConfigurations/{id}/deviceStatuses,v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+131,Reports,get_compliance_policy_status,Deployment status for a compliance policy,GET,/deviceManagement/deviceCompliancePolicies/{id}/deviceStatuses,v1.0,DeviceManagementConfiguration.Read.All,Read,EXISTING
+132,Reports,get_app_installation_status,Installation status for an app,GET,/deviceAppManagement/mobileApps/{id}/installSummary,v1.0,DeviceManagementApps.Read.All,Read,EXISTING
+133,Reports,get_license_usage_report,License usage summary,GET,/subscribedSkus (or /reports/getOffice365ActiveUserDetail),v1.0,Organization.Read.All & Reports.Read.All,Read,EXISTING
+134,Reports,get_hardware_inventory_report,Hardware inventory summary,POST,/deviceManagement/reports/exportJobs (hardwareInventory),beta,DeviceManagementManagedDevices.Read.All,Read,EXISTING
+135,Policy Management,create_compliance_policy,Create a new device compliance policy,POST,/deviceManagement/deviceCompliancePolicies,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+136,Policy Management,update_compliance_policy,Update an existing compliance policy,PATCH,/deviceManagement/deviceCompliancePolicies/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+137,Policy Management,delete_compliance_policy,Delete a compliance policy (confirm=True),DELETE,/deviceManagement/deviceCompliancePolicies/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+138,Policy Management,assign_compliance_policy,Assign compliance policy to group(s),POST,/deviceManagement/deviceCompliancePolicies/{id}/assign,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+139,Policy Management,create_configuration_profile,Create a new device configuration profile,POST,/deviceManagement/deviceConfigurations,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+140,Policy Management,update_configuration_profile,Update an existing configuration profile,PATCH,/deviceManagement/deviceConfigurations/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+141,Policy Management,delete_configuration_profile,Delete a configuration profile (confirm=True),DELETE,/deviceManagement/deviceConfigurations/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+142,Policy Management,assign_configuration_profile,Assign a configuration profile to group(s),POST,/deviceManagement/deviceConfigurations/{id}/assign,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+143,Policy Management,get_compliance_policy_detail,Get single compliance policy details,GET,/deviceManagement/deviceCompliancePolicies/{id},v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+144,Policy Management,get_configuration_profile_detail,Get single configuration profile details,GET,/deviceManagement/deviceConfigurations/{id},v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+145,Policy Management,list_policy_assignments,List assignments for a compliance/config policy,GET,/deviceManagement/deviceCompliancePolicies/{id}/assignments,v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+146,Settings Catalog,list_settings_catalog_policies,List settings catalog configuration policies,GET,/deviceManagement/configurationPolicies,v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+147,Settings Catalog,get_settings_catalog_policy,Get a settings catalog policy by ID,GET,/deviceManagement/configurationPolicies/{id},v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+148,Settings Catalog,create_settings_catalog_policy,Create a new settings catalog policy,POST,/deviceManagement/configurationPolicies,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+149,Settings Catalog,update_settings_catalog_policy,Update a settings catalog policy,PATCH,/deviceManagement/configurationPolicies/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+150,Settings Catalog,delete_settings_catalog_policy,Delete a settings catalog policy (confirm=True),DELETE,/deviceManagement/configurationPolicies/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+151,Settings Catalog,assign_settings_catalog_policy,Assign settings catalog policy to groups,POST,/deviceManagement/configurationPolicies/{id}/assign,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+152,ADMX (Group Policy),list_admx_templates,List administrative (ADMX) templates,GET,/deviceManagement/groupPolicyConfigurations,v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+153,ADMX (Group Policy),get_admx_template,Get ADMX configuration details,GET,/deviceManagement/groupPolicyConfigurations/{id},v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+154,ADMX (Group Policy),create_admx_configuration,Create a new ADMX/GPO-based policy,POST,/deviceManagement/groupPolicyConfigurations,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+155,ADMX (Group Policy),delete_admx_configuration,Delete an ADMX policy (confirm=True),DELETE,/deviceManagement/groupPolicyConfigurations/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+156,Endpoint Security,list_endpoint_security_policies,List all endpoint security policies,GET,/deviceManagement/intents,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+157,Endpoint Security,get_endpoint_security_policy,Get a specific endpoint security policy,GET,/deviceManagement/intents/{id},beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+158,Endpoint Security,create_endpoint_security_policy,Create endpoint security policy (AV/FW/EDR),POST,/deviceManagement/templates/{templateId}/createInstance,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+159,Endpoint Security,update_endpoint_security_policy,Update endpoint security policy settings,PATCH,/deviceManagement/intents/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+160,Endpoint Security,delete_endpoint_security_policy,Delete endpoint security policy (confirm=True),DELETE,/deviceManagement/intents/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+161,Endpoint Security,assign_endpoint_security_policy,Assign endpoint security policy to groups,POST,/deviceManagement/intents/{id}/assign,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+162,Endpoint Security,list_endpoint_security_templates,List all endpoint security templates,GET,/deviceManagement/templates,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+163,Endpoint Security,get_antivirus_policy_status,Get antivirus policy device status summary,GET,/deviceManagement/intents/{id}/deviceStateSummary,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+164,Endpoint Security,list_endpoint_security_tasks,List security tasks from Microsoft Defender,GET,/deviceAppManagement/targetedManagedAppConfigurations,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+165,Endpoint Security,get_unhealthy_defender_agents,Report of Windows devices with unhealthy Defender,POST,/deviceManagement/reports/exportJobs (UnhealthyDefenderAgents),beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+166,Windows Update,list_update_rings,List Windows 10/11 update rings,GET,/deviceManagement/deviceConfigurations?$filter=...(windowsUpdateForBusinessConfiguration),v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+167,Windows Update,get_update_ring,Get a specific Windows update ring,GET,/deviceManagement/deviceConfigurations/{id} (windowsUpdateForBusinessConfiguration),v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+168,Windows Update,create_update_ring,Create a Windows update ring policy,POST,/deviceManagement/deviceConfigurations,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+169,Windows Update,update_update_ring,Update an existing update ring,PATCH,/deviceManagement/deviceConfigurations/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+170,Windows Update,delete_update_ring,Delete a Windows update ring (confirm=True),DELETE,/deviceManagement/deviceConfigurations/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+171,Windows Update,list_feature_update_policies,List Windows feature update profiles,GET,/deviceManagement/windowsFeatureUpdateProfiles,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+172,Windows Update,get_feature_update_policy,Get a feature update profile by ID,GET,/deviceManagement/windowsFeatureUpdateProfiles/{id},beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+173,Windows Update,create_feature_update_policy,Create a feature update profile,POST,/deviceManagement/windowsFeatureUpdateProfiles,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+174,Windows Update,list_quality_update_policies,List Windows quality (expedite) update policies,GET,/deviceManagement/windowsQualityUpdateProfiles,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+175,Windows Update,list_driver_update_policies,List Windows driver update profiles,GET,/deviceManagement/windowsDriverUpdateProfiles,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+176,Advanced Device Actions,locate_device,Trigger device location on GPS-enabled devices,POST,/deviceManagement/managedDevices/{id}/locateDevice,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+177,Advanced Device Actions,reset_passcode,Reset device passcode (iOS/Android),POST,/deviceManagement/managedDevices/{id}/resetPasscode,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+178,Advanced Device Actions,bypass_activation_lock,Bypass iOS Activation Lock,POST,/deviceManagement/managedDevices/{id}/bypassActivationLock,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+179,Advanced Device Actions,enable_lost_mode,Enable iOS Lost Mode with message,POST,/deviceManagement/managedDevices/{id}/enableLostMode,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+180,Advanced Device Actions,disable_lost_mode,Disable iOS Lost Mode,POST,/deviceManagement/managedDevices/{id}/disableLostMode,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+181,Advanced Device Actions,collect_diagnostics,Collect device diagnostics (logs),POST,/deviceManagement/managedDevices/{id}/collectDiagnostics,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+182,Advanced Device Actions,windows_defender_scan,Trigger Windows Defender full/quick scan,POST,/deviceManagement/managedDevices/{id}/windowsDefenderScan,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+183,Advanced Device Actions,windows_defender_update_signatures,Update Windows Defender signatures,POST,/deviceManagement/managedDevices/{id}/windowsDefenderUpdateSignatures,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+184,Advanced Device Actions,clean_windows_device,Clean Windows 10/11 device (keep user data option),POST,/deviceManagement/managedDevices/{id}/cleanWindowsDevice,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+185,Advanced Device Actions,send_custom_notification,Send a custom push notification to a device/user,POST,/deviceManagement/managedDevices/{id}/sendCustomNotificationToCompanyPortal,beta,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+186,Advanced Device Actions,trigger_configuration_manager_action,Trigger ConfigMgr action on co-managed device,POST,/deviceManagement/managedDevices/{id}/triggerConfigurationManagerAction,beta,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+187,Advanced Device Actions,update_windows_device_account,Update account on Windows device,POST,/deviceManagement/managedDevices/{id}/updateWindowsDeviceAccount,v1.0,DeviceManagementManagedDevices.ReadWrite.All,Read.Write,TO ADD
+188,Advanced Device Actions,get_device_log_collection_requests,List diagnostic log collection requests,GET,/deviceManagement/managedDevices/{id}/logCollectionRequests,beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+189,Device Encryption & BitLocker,get_bitlocker_recovery_keys,List BitLocker recovery keys for tenant,GET,/informationProtection/bitlocker/recoveryKeys,v1.0,BitLockerKey.Read.All,Read,TO ADD
+190,Device Encryption & BitLocker,get_bitlocker_recovery_key,Get a specific BitLocker recovery key with value,GET,/informationProtection/bitlocker/recoveryKeys/{id}?$select=key,v1.0,BitLockerKey.ReadBasic.All,Read,TO ADD
+191,Device Encryption & BitLocker,get_filevault_key,Get macOS FileVault recovery key for a device,GET,/deviceManagement/managedDevices/{id}/getFileVaultKey,beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+192,Device Encryption & BitLocker,get_encryption_report,Device encryption status report,POST,/deviceManagement/reports/exportJobs (DeviceEncryption),beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+193,RBAC,list_rbac_role_definitions,List all Intune role definitions (built-in + custom),GET,/deviceManagement/roleDefinitions,v1.0,DeviceManagementRBAC.Read.All,Read,TO ADD
+194,RBAC,get_rbac_role_definition,Get a specific role definition,GET,/deviceManagement/roleDefinitions/{id},v1.0,DeviceManagementRBAC.Read.All,Read,TO ADD
+195,RBAC,create_custom_role,Create a custom Intune RBAC role,POST,/deviceManagement/roleDefinitions,v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+196,RBAC,update_custom_role,Update a custom role definition,PATCH,/deviceManagement/roleDefinitions/{id},v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+197,RBAC,delete_custom_role,Delete a custom role (confirm=True),DELETE,/deviceManagement/roleDefinitions/{id},v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+198,RBAC,list_role_assignments,List all role assignments,GET,/deviceManagement/roleAssignments,v1.0,DeviceManagementRBAC.Read.All,Read,TO ADD
+199,RBAC,create_role_assignment,Assign a role to user/group with scope,POST,/deviceManagement/roleAssignments,v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+200,RBAC,delete_role_assignment,Remove a role assignment,DELETE,/deviceManagement/roleAssignments/{id},v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+201,Filters & Scope Tags,list_assignment_filters,List all assignment filters,GET,/deviceManagement/assignmentFilters,v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+202,Filters & Scope Tags,get_assignment_filter,Get a specific assignment filter,GET,/deviceManagement/assignmentFilters/{id},v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+203,Filters & Scope Tags,create_assignment_filter,Create a new assignment filter,POST,/deviceManagement/assignmentFilters,v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+204,Filters & Scope Tags,update_assignment_filter,Update an assignment filter,PATCH,/deviceManagement/assignmentFilters/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+205,Filters & Scope Tags,delete_assignment_filter,Delete an assignment filter (confirm=True),DELETE,/deviceManagement/assignmentFilters/{id},v1.0,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+206,Filters & Scope Tags,list_scope_tags,List all Intune scope tags,GET,/deviceManagement/roleScopeTags,v1.0,DeviceManagementRBAC.Read.All,Read,TO ADD
+207,Filters & Scope Tags,create_scope_tag,Create a new scope tag,POST,/deviceManagement/roleScopeTags,v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+208,Filters & Scope Tags,delete_scope_tag,Delete a scope tag (confirm=True),DELETE,/deviceManagement/roleScopeTags/{id},v1.0,DeviceManagementRBAC.ReadWrite.All,Read.Write,TO ADD
+209,Token Management,list_vpp_tokens,List Apple VPP (Volume Purchase Program) tokens,GET,/deviceAppManagement/vppTokens,v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+210,Token Management,get_vpp_token,Get a specific VPP token,GET,/deviceAppManagement/vppTokens/{id},v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+211,Token Management,sync_vpp_token,Trigger sync for an Apple VPP token,POST,/deviceAppManagement/vppTokens/{id}/syncLicenses,v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+212,Token Management,list_dep_onboarding_settings,List Apple DEP/ADE enrollment tokens,GET,/deviceManagement/depOnboardingSettings,v1.0,DeviceManagementServiceConfig.Read.All,Read,TO ADD
+213,Token Management,sync_dep_token,Trigger sync for an Apple DEP/ADE token,POST,/deviceManagement/depOnboardingSettings/{id}/syncWithAppleDeviceEnrollmentProgram,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+214,Token Management,list_android_enterprise_accounts,List Android Enterprise enrollment accounts,GET,/deviceManagement/androidManagedStoreAccountEnterpriseSettings,v1.0,DeviceManagementConfiguration.Read.All,Read,TO ADD
+215,App Config & MAM,list_app_config_policies,List all managed app configuration policies,GET,/deviceAppManagement/targetedManagedAppConfigurations,v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+216,App Config & MAM,get_app_config_policy,Get a specific app configuration policy,GET,/deviceAppManagement/targetedManagedAppConfigurations/{id},v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+217,App Config & MAM,create_app_config_policy,Create an app configuration policy (iOS/Android),POST,/deviceAppManagement/targetedManagedAppConfigurations,v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+218,App Config & MAM,update_app_config_policy,Update an app configuration policy,PATCH,/deviceAppManagement/targetedManagedAppConfigurations/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+219,App Config & MAM,delete_app_config_policy,Delete an app config policy (confirm=True),DELETE,/deviceAppManagement/targetedManagedAppConfigurations/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+220,App Config & MAM,create_app_protection_policy,Create an app protection (MAM) policy,POST,/deviceAppManagement/iosManagedAppProtections,v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+221,App Config & MAM,update_app_protection_policy,Update an app protection policy,PATCH,/deviceAppManagement/iosManagedAppProtections/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+222,App Config & MAM,delete_app_protection_policy,Delete an app protection policy (confirm=True),DELETE,/deviceAppManagement/iosManagedAppProtections/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+223,App Config & MAM,create_mobile_app,Upload/create a new mobile app in Intune,POST,/deviceAppManagement/mobileApps,v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+224,App Config & MAM,update_mobile_app,Update an existing mobile app metadata,PATCH,/deviceAppManagement/mobileApps/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+225,App Config & MAM,delete_mobile_app,Delete an app from Intune (confirm=True),DELETE,/deviceAppManagement/mobileApps/{id},v1.0,DeviceManagementApps.ReadWrite.All,Read.Write,TO ADD
+226,App Config & MAM,list_discovered_apps,List all apps discovered across managed devices,GET,/deviceAppManagement/detectedApps,v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+227,App Config & MAM,get_managed_app_registrations,List managed app registrations (MAM enrollment),GET,/deviceAppManagement/managedAppRegistrations,v1.0,DeviceManagementApps.Read.All,Read,TO ADD
+228,Autopilot,create_autopilot_profile,Create an Autopilot deployment profile,POST,/deviceManagement/windowsAutopilotDeploymentProfiles,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+229,Autopilot,update_autopilot_profile,Update an Autopilot deployment profile,PATCH,/deviceManagement/windowsAutopilotDeploymentProfiles/{id},v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+230,Autopilot,delete_autopilot_profile,Delete an Autopilot profile (confirm=True),DELETE,/deviceManagement/windowsAutopilotDeploymentProfiles/{id},v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+231,Autopilot,assign_autopilot_profile,Assign Autopilot profile to device/group,POST,/deviceManagement/windowsAutopilotDeploymentProfiles/{id}/assignments,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+232,Autopilot,import_autopilot_device,Import Autopilot device via hardware hash,POST,/deviceManagement/importedWindowsAutopilotDeviceIdentities,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+233,Autopilot,delete_autopilot_device,Delete an Autopilot device registration,DELETE,/deviceManagement/windowsAutopilotDeviceIdentities/{id},v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+234,Autopilot,get_autopilot_deployment_status,Get Autopilot deployment state for a device,GET,/deviceManagement/autopilotEvents,beta,DeviceManagementServiceConfig.Read.All,Read,TO ADD
+235,Autopilot,list_enrollment_status_page_profiles,List Enrollment Status Page (ESP) profiles,GET,/deviceManagement/deviceEnrollmentConfigurations?$filter=...,v1.0,DeviceManagementServiceConfig.Read.All,Read,TO ADD
+236,Scripts & Remediations,create_device_management_script,Upload a new PowerShell script to Intune,POST,/deviceManagement/deviceManagementScripts,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+237,Scripts & Remediations,update_device_management_script,Update an existing PowerShell script,PATCH,/deviceManagement/deviceManagementScripts/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+238,Scripts & Remediations,delete_device_management_script,Delete a PowerShell script (confirm=True),DELETE,/deviceManagement/deviceManagementScripts/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+239,Scripts & Remediations,assign_device_management_script,Assign a PowerShell script to groups,POST,/deviceManagement/deviceManagementScripts/{id}/assignments,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+240,Scripts & Remediations,create_device_health_script,Create a new proactive remediation script,POST,/deviceManagement/deviceHealthScripts,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+241,Scripts & Remediations,update_device_health_script,Update an existing remediation script,PATCH,/deviceManagement/deviceHealthScripts/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+242,Scripts & Remediations,delete_device_health_script,Delete a remediation script (confirm=True),DELETE,/deviceManagement/deviceHealthScripts/{id},beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+243,Scripts & Remediations,assign_device_health_script,Assign a remediation script to groups,POST,/deviceManagement/deviceHealthScripts/{id}/assignments,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+244,Scripts & Remediations,list_macOS_scripts,List macOS shell scripts in Intune,GET,/deviceManagement/deviceShellScripts,beta,DeviceManagementConfiguration.Read.All,Read,TO ADD
+245,Scripts & Remediations,create_macOS_script,Upload a new macOS shell script,POST,/deviceManagement/deviceShellScripts,beta,DeviceManagementConfiguration.ReadWrite.All,Read.Write,TO ADD
+246,Enrollment,create_enrollment_restriction,Create an enrollment restriction policy,POST,/deviceManagement/deviceEnrollmentConfigurations,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+247,Enrollment,update_enrollment_restriction,Update an enrollment restriction,PATCH,/deviceManagement/deviceEnrollmentConfigurations/{id},v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+248,Enrollment,delete_enrollment_restriction,Delete an enrollment restriction (confirm=True),DELETE,/deviceManagement/deviceEnrollmentConfigurations/{id},v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+249,Enrollment,assign_enrollment_restriction,Assign enrollment restriction to groups,POST,/deviceManagement/deviceEnrollmentConfigurations/{id}/assign,v1.0,DeviceManagementServiceConfig.ReadWrite.All,Read.Write,TO ADD
+250,Enrollment,list_enrollment_profiles,List macOS/iOS enrollment profiles (DEP),GET,/deviceManagement/depOnboardingSettings/{id}/enrollmentProfiles,v1.0,DeviceManagementServiceConfig.Read.All,Read,TO ADD
+251,Enrollment,get_enrollment_failures_report,Report of enrollment failures,POST,/deviceManagement/reports/exportJobs (DeviceEnrollmentFailures),beta,DeviceManagementServiceConfig.Read.All,Read,TO ADD
+252,Conditional Access,create_conditional_access_policy,Create a new Conditional Access policy,POST,/identity/conditionalAccess/policies,v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+253,Conditional Access,update_conditional_access_policy,Update a Conditional Access policy,PATCH,/identity/conditionalAccess/policies/{id},v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+254,Conditional Access,delete_conditional_access_policy,Delete a CA policy (confirm=True),DELETE,/identity/conditionalAccess/policies/{id},v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+255,Conditional Access,create_named_location,Create a named location (IP or country),POST,/identity/conditionalAccess/namedLocations,v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+256,Conditional Access,update_named_location,Update a named location,PATCH,/identity/conditionalAccess/namedLocations/{id},v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+257,Conditional Access,delete_named_location,Delete a named location (confirm=True),DELETE,/identity/conditionalAccess/namedLocations/{id},v1.0,Policy.ReadWrite.ConditionalAccess,Read.Write,TO ADD
+258,Authentication & Identity Protection,delete_user_authentication_method,Remove an auth method (e.g. FIDO key),DELETE,/users/{id}/authentication/methods/{methodId},v1.0,UserAuthenticationMethod.ReadWrite.All,Read.Write,TO ADD
+259,Authentication & Identity Protection,require_mfa_re_register,Require user to re-register MFA,POST,/users/{id}/authentication/methods,beta,UserAuthenticationMethod.ReadWrite.All,Read.Write,TO ADD
+260,Authentication & Identity Protection,confirm_risky_users,Confirm users as compromised,POST,/identityProtection/riskyUsers/confirmCompromised,v1.0,IdentityRiskyUser.ReadWrite.All,Read.Write,TO ADD
+261,Authentication & Identity Protection,get_authentication_methods_policy,Get tenant-wide authentication methods policy,GET,/policies/authenticationMethodsPolicy,v1.0,Policy.Read.All,Read,TO ADD
+262,Windows 365 Cloud PC,resize_cloud_pc,Resize (upgrade) a Cloud PC,POST,/deviceManagement/virtualEndpoint/cloudPCs/{id}/resize,beta,CloudPC.ReadWrite.All,Read.Write,TO ADD
+263,Windows 365 Cloud PC,restore_cloud_pc,Restore Cloud PC from snapshot,POST,/deviceManagement/virtualEndpoint/cloudPCs/{id}/restore,v1.0,CloudPC.ReadWrite.All,Read.Write,TO ADD
+264,Windows 365 Cloud PC,troubleshoot_cloud_pc,Trigger troubleshoot action on Cloud PC,POST,/deviceManagement/virtualEndpoint/cloudPCs/{id}/troubleshoot,v1.0,CloudPC.ReadWrite.All,Read.Write,TO ADD
+265,Windows 365 Cloud PC,list_cloud_pc_snapshots,List available snapshots for a Cloud PC,GET,/deviceManagement/virtualEndpoint/cloudPCs/{id}/snapshots,beta,CloudPC.Read.All,Read,TO ADD
+266,Windows 365 Cloud PC,create_provisioning_policy,Create a Cloud PC provisioning policy,POST,/deviceManagement/virtualEndpoint/provisioningPolicies,v1.0,CloudPC.ReadWrite.All,Read.Write,TO ADD
+267,Windows 365 Cloud PC,assign_provisioning_policy,Assign a provisioning policy to groups,POST,/deviceManagement/virtualEndpoint/provisioningPolicies/{id}/assign,v1.0,CloudPC.ReadWrite.All,Read.Write,TO ADD
+268,Windows 365 Cloud PC,list_on_premises_connections,List Azure network connections for Cloud PC,GET,/deviceManagement/virtualEndpoint/onPremisesConnections,v1.0,CloudPC.Read.All,Read,TO ADD
+269,Windows 365 Cloud PC,get_cloud_pc_audit_events,Get Cloud PC audit event logs,GET,/deviceManagement/virtualEndpoint/auditEvents,beta,CloudPC.Read.All,Read,TO ADD
+270,Tenant Administration,get_message_center_posts,M365 message center / advisory posts,GET,/admin/serviceAnnouncement/messages,v1.0,ServiceHealth.Read.All,Read,TO ADD
+271,Tenant Administration,get_planned_maintenance,List planned maintenance events,GET,/admin/serviceAnnouncement/messages?$filter=...(maintenance),v1.0,ServiceHealth.Read.All,Read,TO ADD
+272,Tenant Administration,remove_directory_role_member,Remove a member from a directory role,DELETE,/directoryRoles/{id}/members/{memberId}/$ref,v1.0,RoleManagement.ReadWrite.Directory,Read.Write,TO ADD
+273,Tenant Administration,list_terms_of_use,List Terms of Use agreements,GET,/agreements,v1.0,Agreement.Read.All,Read,TO ADD
+274,Tenant Administration,create_terms_of_use,Create a Terms of Use agreement,POST,/agreements,v1.0,Agreement.ReadWrite.All,Read.Write,TO ADD
+275,Tenant Administration,get_cross_tenant_access_policy,Get cross-tenant access (B2B) policy,GET,/policies/crossTenantAccessPolicy,v1.0,Policy.Read.All,Read,TO ADD
+276,Reports,get_endpoint_analytics_score,Get Endpoint Analytics baseline scores,GET,/deviceManagement/userExperienceAnalyticsBaselines,beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+277,Reports,get_startup_performance_report,Startup performance data (device boot times),GET,/deviceManagement/userExperienceAnalyticsDeviceStartupHistory,beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+278,Reports,get_app_reliability_report,Application reliability (crash) scores,GET,/deviceManagement/userExperienceAnalyticsAppHealthApplicationPerformance,beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+279,Reports,get_work_from_anywhere_report,Work from anywhere report (Windows readiness),POST,/deviceManagement/reports/exportJobs (WorkFromAnywhereDeviceList),beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+280,Reports,get_app_inventory_report,App inventory (all apps across devices) export,POST,/deviceManagement/reports/exportJobs (AppInvAggregate),beta,DeviceManagementApps.Read.All,Read,TO ADD
+281,Reports,get_certificate_report,Device certificate status and expiry report,POST,/deviceManagement/reports/exportJobs (AllDeviceCertificates),beta,DeviceManagementManagedDevices.Read.All,Read,TO ADD
+282,Reports,get_co_management_report,Co-management eligibility/status report,GET,/deviceManagement/managedDevices?$select=...(managementAgent&joinType),v1.0,DeviceManagementManagedDevices.Read.All,Read,TO ADD
